@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>PERKS Car Wash & Detailing L.L.C.</title>
+<title>PERKS Car Wash &amp; Detailing L.L.C.</title>
 
 <style>
 * {
@@ -88,7 +86,7 @@ header {
     color: black;
 }
 
-/* Hero section */
+/* Hero section and automatic background slideshow */
 .hero {
     min-height: 100vh;
     position: relative;
@@ -96,53 +94,28 @@ header {
     display: flex;
     align-items: center;
     padding: 60px 8%;
+    background: #0b0b0b;
 }
 
 .hero-slide {
     position: absolute;
     inset: 0;
+    z-index: 0;
+    opacity: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0;
-    animation: slideshow 15s infinite;
-    transition: opacity 0.4s ease-in-out;
+    transition: opacity 0.45s ease-in-out;
 }
 
-.slide1 { animation-delay: 0s; }
-.slide2 { animation-delay: 3s; }
-.slide3 { animation-delay: 6s; }
-.slide4 { animation-delay: 9s; }
-.slide5 { animation-delay: 12s; }
-
-@keyframes slideshow {
-    0% {
-        opacity: 1;
-    }
-    19% {
-        opacity: 1;
-    }
-    20% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-
-@keyframes slideshow {
-    0%, 16% {
-        opacity: 1;
-    }
-
-    20%, 100% {
-        opacity: 0;
-    }
+.hero-slide.active {
+    opacity: 1;
 }
 
 .hero-content {
     position: relative;
     z-index: 2;
+    max-width: 850px;
 }
 
 .hero h1 {
@@ -195,7 +168,7 @@ section {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 25px;
 }
 
@@ -263,7 +236,11 @@ footer {
     text-align: center;
 }
 
-@media(max-width:700px) {
+@media (max-width: 700px) {
+    .hero {
+        min-height: 85vh;
+    }
+
     .hero h1 {
         font-size: 35px;
     }
@@ -305,16 +282,11 @@ footer {
 
 <!-- HOME -->
 <section class="hero" id="home">
-
-    <!-- Background slideshow -->
-    <div class="hero-slide slide1"></div>
-    <div class="hero-slide slide2"></div>
-    <div class="hero-slide slide3"></div>
-    <div class="hero-slide slide4"></div>
-    <div class="hero-slide slide5"></div>
+    <!-- The slideshow images are loaded by JavaScript below. -->
+    <div class="hero-slide active" id="heroSlideA"></div>
+    <div class="hero-slide" id="heroSlideB"></div>
 
     <div class="hero-content">
-
         <h1>
             Premium Mobile
             <span>Car Wash</span>
@@ -335,14 +307,12 @@ footer {
         <a class="whatsapp-btn" href="#" aria-label="WhatsApp booking">
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
         </a>
-
     </div>
 </section>
 
 <!-- ABOUT -->
 <section class="about">
     <h2 class="title">About Us</h2>
-
     <p>
         At PERKS CAR WASH AND DETAILING L.L.C., we believe every
         vehicle deserves exceptional care. Our mission is to provide
@@ -377,7 +347,7 @@ footer {
         </div>
 
         <div class="card">
-            <h3>Wax & Paint Protection</h3>
+            <h3>Wax &amp; Paint Protection</h3>
             <p>Protection against Dubai sun and dust.</p>
         </div>
 
@@ -408,7 +378,6 @@ footer {
     <h2 class="title">Pricing</h2>
 
     <div class="grid">
-
         <div class="card">
             <h3>Basic Wash</h3>
             <div class="price">
@@ -459,7 +428,6 @@ footer {
                 AED 800
             </div>
         </div>
-
     </div>
 </section>
 
@@ -540,12 +508,12 @@ footer {
 </footer>
 
 <script>
+/* Dropdown menu */
 function toggleMenu() {
     const menu = document.getElementById("dropdownMenu");
     const button = document.getElementById("menuButton");
 
     menu.classList.toggle("show");
-
     button.setAttribute(
         "aria-expanded",
         menu.classList.contains("show")
@@ -564,6 +532,66 @@ document.addEventListener("click", function(event) {
         closeMenu();
     }
 });
+
+/* Five-image hero slideshow.
+   Upload car1.jpg, car2.jpg, car3.jpg, car4.jpg and car5.jpg
+   into the same GitHub folder as this index.html file. */
+const heroImages = [
+    "1gwagon-wash.png",
+    "gwagon-wash.jpg",
+    "gwagon-wash.png",
+    "car4.jpg",
+    "car5.jpg"
+];
+
+const heroSlideA = document.getElementById("heroSlideA");
+const heroSlideB = document.getElementById("heroSlideB");
+
+let currentImageIndex = 0;
+let activeSlide = heroSlideA;
+let inactiveSlide = heroSlideB;
+
+/* Add a dark overlay over each photo to keep the text readable. */
+function setHeroImage(element, imagePath) {
+    element.style.backgroundImage =
+        'linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url("' +
+        imagePath + '")';
+}
+
+/* Show the first image immediately. */
+setHeroImage(heroSlideA, heroImages[0]);
+
+/* Preload the remaining images to reduce blank frames during changes. */
+heroImages.forEach(function(imagePath) {
+    const image = new Image();
+    image.src = imagePath;
+});
+
+/* Change image every 3 seconds with a short crossfade. */
+setInterval(function() {
+    const nextIndex = (currentImageIndex + 1) % heroImages.length;
+    const nextImage = new Image();
+
+    nextImage.onload = function() {
+        setHeroImage(inactiveSlide, heroImages[nextIndex]);
+
+        inactiveSlide.classList.add("active");
+        activeSlide.classList.remove("active");
+
+        const previousActive = activeSlide;
+        activeSlide = inactiveSlide;
+        inactiveSlide = previousActive;
+
+        currentImageIndex = nextIndex;
+    };
+
+    nextImage.onerror = function() {
+        console.warn("Could not load slideshow image: " + heroImages[nextIndex]);
+        currentImageIndex = nextIndex;
+    };
+
+    nextImage.src = heroImages[nextIndex];
+}, 3000);
 </script>
 
 </body>
