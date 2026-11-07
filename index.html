@@ -106,36 +106,28 @@ header {
     background-repeat: no-repeat;
     opacity: 0;
     animation: slideshow 15s infinite;
+    transition: opacity 0.4s ease-in-out;
 }
 
-.slide1 {
-    background-image: linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url("1gwagon-wash.png");
-    animation-delay: 0s;
-}
+.slide1 { animation-delay: 0s; }
+.slide2 { animation-delay: 3s; }
+.slide3 { animation-delay: 6s; }
+.slide4 { animation-delay: 9s; }
+.slide5 { animation-delay: 12s; }
 
-.slide2 {
-    background-image: linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url("gwagon-wash.jpg");
-    animation-delay: -3s;
-}
-
-.slide3 {
-    background-image: linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url("gwagon-wash.png");
-    animation-delay: -6s;
-}
-
-.slide4 {
-    background-image: linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url("car4.jpg");
-    animation-delay: -9s;
-}
-
-.slide5 {
-    background-image: linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url("car5.jpg");
-    animation-delay: -12s;
+@keyframes slideshow {
+    0% {
+        opacity: 1;
+    }
+    19% {
+        opacity: 1;
+    }
+    20% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 @keyframes slideshow {
